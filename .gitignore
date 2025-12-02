@@ -1,0 +1,45 @@
+# Arduino build files
+*.elf
+*.bin
+*.hex
+*.eep
+*.lss
+*.sym
+*.map
+*.su
+*.d
+*.o
+*.a
+*.lst
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build directories
+build/
+.pio/
+
+# Temporary files
+*.tmp
+*.log
+*.bak
+
+# Arduino CLI
+bin/
+get-platformio.py
+Timer.zip
+
+# Data files with sensitive info (keep structure, but ignore tokens)
+# Uncomment if you want to exclude data files:
+# data/accessToken.txt
+# data/refreshToken.txt
+# data/fingerprint.txt
+

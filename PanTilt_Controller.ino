@@ -4,6 +4,10 @@
  * ESP8266 firmware for controlling pan-tilt mechanism via serial commands from HARC software.
  * Receives commands via Serial (USB) and controls motors + water spray relay.
  * 
+ * This firmware is mode-agnostic - it doesn't know about Manual/Manual+Aim-Bot/Full Auto modes.
+ * All mode logic (including aim-bot assistance) happens in HARC software layer.
+ * This firmware just executes movement commands sent from HARC.
+ * 
  * Serial Protocol (9600 baud):
  * - MOVE X Y        : Relative movement (-100 to 100 for each axis)
  * - POS X Y         : Absolute position (-100 to 100 for each axis)
@@ -20,6 +24,11 @@
  * - Pin 13: Tilt motor speed/pulse (or direction pin for stepper)
  * 
  * Note: Adjust pin definitions based on your motor driver setup
+ * 
+ * Compatible with all HARC modes:
+ * - Manual: Direct joystick commands
+ * - Manual + Aim-Bot: Blended joystick + AI commands (blending done in HARC)
+ * - Full Auto: AI-generated commands
  */
 
 // Pin Definitions
@@ -143,7 +152,8 @@ void moveCannon(int xSpeed, int ySpeed) {
   xSpeed = constrain(xSpeed, -100, 100);
   ySpeed = constrain(ySpeed, -100, 100);
   
-  // Update positions (scaled)
+  // Update positions (scaled) - tracks position for feedback
+  // Note: This is approximate tracking. For precise position, use encoders/feedback
   current_pan_position += xSpeed * 0.1;
   current_tilt_position += ySpeed * 0.1;
   
@@ -152,6 +162,10 @@ void moveCannon(int xSpeed, int ySpeed) {
   current_tilt_position = constrain(current_tilt_position, -100.0, 100.0);
   
   // Control motors based on speed
+  // This works for all modes:
+  // - Manual: Direct joystick input
+  // - Manual + Aim-Bot: Pre-blended input from HARC (joystick + AI assistance)
+  // - Full Auto: AI-generated movement commands
   controlPanMotor(xSpeed);
   controlTiltMotor(ySpeed);
 }

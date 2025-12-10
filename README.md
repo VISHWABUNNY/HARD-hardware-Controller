@@ -167,6 +167,16 @@ void controlPanMotor(int speed) {
    ```
 4. HARC backend will automatically connect and send commands
 
+## Mode Compatibility
+
+This firmware is **mode-agnostic** and works with all HARC system modes:
+
+- **Manual Mode**: Receives direct joystick commands
+- **Manual + Aim-Bot Mode**: Receives pre-blended commands (joystick + AI assistance blended in HARC software)
+- **Full Auto Mode**: Receives AI-generated movement commands
+
+**Important**: The ESP8266 doesn't need to know which mode is active. All mode logic (including aim-bot assistance blending) happens in the HARC software layer before commands are sent to hardware. The firmware just executes whatever movement commands it receives.
+
 ## Troubleshooting
 
 ### ESP8266 Not Responding
